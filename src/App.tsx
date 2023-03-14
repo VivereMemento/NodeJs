@@ -1,7 +1,16 @@
-import './App.css';
+import { CreateMemory } from './components/CreateMemory/CreateMemory';
+import { Posts } from './components/Posts/Posts';
 
 function App() {
-	return <div className="App">Hello</div>;
+	return (
+		<div>
+			<CreateMemory />
+			<div>
+				<h2>Posts</h2>
+				<Posts />
+			</div>
+		</div>
+	);
 }
 
 export default App;
