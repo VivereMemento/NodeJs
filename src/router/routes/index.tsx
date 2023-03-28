@@ -6,7 +6,7 @@ import ErrorPage from '../../pages/ErrorPage/ErrorPage';
 import Login from '../../pages/Login/Login';
 
 import { store } from '../../store/store';
-import ProtectedRoute from './PortectedRoute';
+import ProtectedRoute from './ProtectedRoute';
 
 const routes = createBrowserRouter([
 	{
