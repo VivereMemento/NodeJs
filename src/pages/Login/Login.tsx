@@ -1,18 +1,32 @@
-import { Form } from 'react-router-dom';
+import { useCallback, useState } from 'react';
+import { Button } from '../../components/UI/Button/Button';
+import SignIn from './SignIn';
+import SignUp from './SignUp';
+
+import './login.css';
 
 const Login = () => {
+	const [isAuth, setIsAuth] = useState(true);
+	const handleOnClick = useCallback(() => setIsAuth(prev => !prev), []);
 	return (
-		<Form method="post" action="/events">
-			<label htmlFor="email">
-				Email:
-				<input type="text" name="email" />
-			</label>
-			<label htmlFor="password">
-				Password:
-				<input type="password" name="password" />
-			</label>
-			<button type="submit">Create</button>
-		</Form>
+		<div className="login">
+			;{isAuth ? <SignIn /> : <SignUp />}
+			{isAuth ? (
+				<div>
+					Don't have an account
+					<Button type="button" onClick={handleOnClick}>
+						Sign Up
+					</Button>
+				</div>
+			) : (
+				<div>
+					Already have an account
+					<Button type="button" onClick={handleOnClick}>
+						Sign In
+					</Button>
+				</div>
+			)}
+		</div>
 	);
 };
 

@@ -3,11 +3,13 @@ import { ChangeEvent, FC, memo, useState } from 'react';
 type InputType = {
 	placeholder: string;
 	value: string;
+	type?: 'text' | 'password';
+	name?: string;
 	onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 };
 
 export const TextInput: FC<InputType> = memo(
-	({ value, placeholder, onChange }) => {
+	({ value, placeholder, onChange, type = 'text', name }) => {
 		const [innerValue, setInnerValue] = useState('');
 		const handleOnChange = (event: ChangeEvent<HTMLInputElement>) =>
 			setInnerValue(event.target.value);
@@ -15,9 +17,10 @@ export const TextInput: FC<InputType> = memo(
 		return (
 			<input
 				onChange={onChange ? onChange : handleOnChange}
-				type="text"
+				type={type}
 				placeholder={placeholder}
 				value={value ? value : innerValue}
+				name={name}
 			/>
 		);
 	}

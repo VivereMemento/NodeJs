@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { BASE_URL } from '../model/api';
-// import { Auth } from '../models/localStorage';
+import { Profile, PROFILE } from '../model/localStorage';
 
 const $api = axios.create({
 	withCredentials: true,
@@ -8,12 +8,15 @@ const $api = axios.create({
 });
 
 $api.interceptors.request.use(config => {
-	// const auth = window.localStorage.getItem(AUTH);
-	// const { accessToken } = JSON.parse(auth ?? '');
+	const profile: Profile = JSON.parse(
+		window.localStorage.getItem(PROFILE) ?? ''
+	);
+	const { access } = profile;
+	const { access_token } = access;
 
-	// if (config.headers && accessToken) {
-	// 	config.headers.Authorization = `Bearer ${accessToken}`;
-	// }
+	if (config.headers && access_token) {
+		config.headers.Authorization = `Bearer ${access_token}`;
+	}
 
 	return config;
 });
