@@ -1,8 +1,8 @@
 import { FC, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
 import {
-	Post as PostType,
 	POST_UPDATING_TYPES_LIST,
+	Post as PostType,
 } from '../../../model/posts';
 import { deletePost } from '../../../store/actions/posts';
 import { getPostsUpdating } from '../../../store/selectors/posts';
@@ -11,13 +11,11 @@ import { Button } from '../../UI/Button/Button';
 
 import './post.css';
 
-export const Post: FC<PostType> = ({
-	id,
-	title,
-	message,
-	createdAt,
-	creator,
-}) => {
+type PostProps = Readonly<{
+	post: PostType;
+}>;
+
+export const Post: FC<PostProps> = ({ post }) => {
 	const [isUpdating, setIsUpdating] = useState(false);
 	const {
 		id: updatedPostID,
@@ -26,6 +24,7 @@ export const Post: FC<PostType> = ({
 		isError,
 	} = useAppSelector(getPostsUpdating);
 	const dispatch = useAppDispatch();
+	const { id, title, message, createdAt, creator } = post;
 
 	const handleDelete = () => dispatch(deletePost({ _id: id }));
 	const handleUpdate = () => setIsUpdating(prev => !prev);
@@ -39,7 +38,7 @@ export const Post: FC<PostType> = ({
 			<span>
 				Created by <b>{creator}</b> at <time>{createdAt}</time>
 			</span>
-			{isUpdating && <EditMemory id={id} />}
+			{isUpdating && <EditMemory post={post} />}
 			<div>
 				<Button type="button" onClick={handleDelete}>
 					{isActive && isDeleting && isCurrentPost ? 'Deleting...' : 'Delete'}

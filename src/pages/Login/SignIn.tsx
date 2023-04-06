@@ -1,55 +1,50 @@
-import { useGoogleLogin } from '@react-oauth/google';
-import { useEffect } from 'react';
 import { Form, Navigate } from 'react-router-dom';
-import { googleAuth } from '../../api/googleApi';
 import { TextInput } from '../../components/UI/Input/Input';
-import { useLocalStorage } from '../../hooks/localStorage';
-import {
-	initialProfileAccessState,
-	PROFILE,
-	Profile,
-} from '../../model/localStorage';
+
+import { useGoogleAuth } from '../../hooks/google';
+
+const initialSignInFormState = {
+	email: '',
+	password: '',
+};
+
+type SignInFormKeys = keyof typeof initialSignInFormState;
+
+const setInitialSignInFormState = (key: SignInFormKeys) => (value: string) => {
+	initialSignInFormState[key] = value;
+};
 
 const SignIn = () => {
-	const { storedValue: profile, setValue: setProfile } =
-		useLocalStorage<Profile>(PROFILE, {
-			access: initialProfileAccessState,
-			user: undefined,
-		});
-
-	const login = useGoogleLogin({
-		onSuccess: async codeResponse => {
-			const { user } = profile;
-			setProfile({ access: codeResponse, user });
-		},
-	});
-
-	useEffect(() => {
-		const { access } = profile;
-		const { access_token } = access;
-		const getGoogleUser = async (token: string) => {
-			const { data: user } = await googleAuth(token);
-			setProfile({ access, user });
-		};
-
-		if (access_token) {
-			getGoogleUser(access_token);
-		}
-	}, [profile.access]);
+	const { profile, login } = useGoogleAuth();
 
 	if (profile.user) {
 		return <Navigate to="/" replace />;
 	}
 
 	return (
-		<Form className="signin" method="post" action="/events">
+		<Form
+			className="signin"
+			method="post"
+			onSubmit={() => console.log(initialSignInFormState)}
+		>
 			<label htmlFor="email">
 				Email:
-				<TextInput placeholder="" value="" name="email" />
+				<TextInput
+					getValue={setInitialSignInFormState('email')}
+					placeholder=""
+					value=""
+					name="email"
+				/>
 			</label>
 			<label htmlFor="password">
 				Password:
-				<TextInput type="password" placeholder="" value="" name="password" />
+				<TextInput
+					getValue={setInitialSignInFormState('password')}
+					type="password"
+					placeholder=""
+					value=""
+					name="password"
+				/>
 			</label>
 			<button type="submit">Sign In</button>
 			<button type="button" onClick={() => login()}>

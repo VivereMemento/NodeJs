@@ -24,7 +24,7 @@ export function Posts() {
 		<ul className="posts">
 			{entities.map(entity => (
 				<li key={entity.id}>
-					<Post {...entity} />
+					<Post post={entity} />
 				</li>
 			))}
 		</ul>

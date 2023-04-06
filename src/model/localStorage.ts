@@ -12,7 +12,9 @@ export type Profile = {
 
 export const PROFILE = 'profile';
 
-export const initialProfileAccessState: ProfileAccess = {
-	access_token: '',
-	expires_in: 0,
+export const initialProfileState: Profile = {
+	access: {
+		access_token: '',
+		expires_in: 0,
+	},
 };

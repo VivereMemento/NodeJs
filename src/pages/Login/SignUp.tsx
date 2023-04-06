@@ -1,34 +1,51 @@
 import { Form } from 'react-router-dom';
 import { TextInput } from '../../components/UI/Input/Input';
 
+const SIGN_UP_FORM = {
+	firstname: 'firstname',
+	lastname: 'lastname',
+	email: 'email',
+	password: 'password',
+	repeatPassword: 'repeatPassword',
+} as const;
+
+type SignUpFormKeys = keyof typeof SIGN_UP_FORM;
+
+const initialSignUpFormState: Record<SignUpFormKeys, string> = {
+	firstname: '',
+	lastname: '',
+	email: '',
+	password: '',
+	repeatPassword: '',
+};
+const signUpFormEntries = Object.entries(
+	initialSignUpFormState
+) as ReadonlyArray<[SignUpFormKeys, string]>;
+
+const setInitialSignUpFormState = (key: SignUpFormKeys) => (value: string) => {
+	initialSignUpFormState[key] = value;
+};
+
 const SignUp = () => {
 	return (
-		<Form className="signup" method="post" action="/events">
-			<label htmlFor="firstname">
-				Firstname:
-				<TextInput placeholder="" value="" name="firstname" />
-			</label>
-			<label htmlFor="lastname">
-				Lastname:
-				<TextInput placeholder="" value="" name="lastname" />
-			</label>
-			<label htmlFor="email">
-				Email:
-				<TextInput placeholder="" value="" name="email" />
-			</label>
-			<label htmlFor="password">
-				Password:
-				<TextInput type="password" placeholder="" value="" name="password" />
-			</label>
-			<label htmlFor="repeat-password">
-				Repeat password:
-				<TextInput
-					type="password"
-					placeholder=""
-					value=""
-					name="repeat-password"
-				/>
-			</label>
+		<Form
+			className="signup"
+			method="post"
+			onSubmit={() => console.log(initialSignUpFormState)}
+		>
+			{signUpFormEntries.map(([key, value]) => {
+				return (
+					<label key={key} htmlFor={key}>
+						<span className="signup__label">{key}:</span>
+						<TextInput
+							getValue={setInitialSignUpFormState(key)}
+							placeholder=""
+							value={value}
+							name={key}
+						/>
+					</label>
+				);
+			})}
 			<button type="submit">Sign Up</button>
 		</Form>
 	);

@@ -12,3 +12,8 @@
 	gap: 5px;
 	max-width: 300px;
 }
+
+.signup__label {
+	margin-right: 5px;
+	text-transform: capitalize;
+}

@@ -1,4 +1,3 @@
-import { GoogleOAuthProvider } from '@react-oauth/google';
 import { createBrowserRouter } from 'react-router-dom';
 
 import App from '../../App';
@@ -19,11 +18,7 @@ const routes = createBrowserRouter([
 	},
 	{
 		path: 'auth',
-		element: (
-			<GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-				<Login />
-			</GoogleOAuthProvider>
-		),
+		element: <Login />,
 	},
 ]);
 

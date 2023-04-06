@@ -9,9 +9,9 @@ import { PostsBuilder } from './types';
 export const deletePost = createAsyncThunk(
 	'posts/deletePost',
 	async (data: Pick<Protocol.Post, '_id'>) => {
-		const response = await api$.delete<Protocol.Post>(`${BASE_URL}/posts`, {
-			data,
-		});
+		const response = await api$.delete<Protocol.Post>(
+			`${BASE_URL}/posts/${data._id}`
+		);
 
 		if (response.status === 204) {
 			throw new Error('No content');
