@@ -11,7 +11,7 @@ const SIGN_UP_FORM = {
 
 type SignUpFormKeys = keyof typeof SIGN_UP_FORM;
 
-const initialSignUpFormState: Record<SignUpFormKeys, string> = {
+const initialSignUpFormState: Record<keyof typeof SIGN_UP_FORM, string> = {
 	firstname: '',
 	lastname: '',
 	email: '',
