@@ -42,7 +42,7 @@ export const CreateMemory = memo(() => {
 					key={key}
 					value={fields[key]}
 					placeholder={value}
-					getValue={setFieldValue(key)}
+					passValueToParent={setFieldValue(key)}
 				/>
 			))}
 			<Button type="button" onClick={handleOnSubmit}>

@@ -1,4 +1,4 @@
-import { FC, FormEventHandler, memo, useEffect } from 'react';
+import { FC, FormEventHandler, memo } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { POST_UPDATING_TYPES_LIST, Post } from '../../model/posts';
 import { getPostsUpdating } from '../../store/selectors/posts';
@@ -13,19 +13,23 @@ type EditMemory = Readonly<{
 	post: Post;
 }>;
 
-const editMemoryFieldsState = {
+const editMemoryFieldsState: Pick<Post, 'title' | 'message'> = {
 	title: '',
 	message: '',
 };
 
-export const EditMemory: FC<EditMemory> = memo(({ post }) => {
-	const { isActive, type, id: editedPostId } = useAppSelector(getPostsUpdating);
-	const dispatch = useAppDispatch();
-	const { title, message, id } = post;
+const { fields, fieldsEntries, setFieldValue } = formFieldsState(
+	editMemoryFieldsState
+);
 
-	const { fields, fieldsEntries, setFieldValue } = formFieldsState(
-		editMemoryFieldsState
-	);
+export const EditMemory: FC<EditMemory> = memo(({ post }) => {
+	const {
+		isActive: isPostUpdatingActive,
+		type,
+		id: editedPostId,
+	} = useAppSelector(getPostsUpdating);
+	const dispatch = useAppDispatch();
+	const { id } = post;
 
 	const isEditing = type === POST_UPDATING_TYPES_LIST.editing;
 	const isCurrentPost = id === editedPostId;
@@ -36,23 +40,23 @@ export const EditMemory: FC<EditMemory> = memo(({ post }) => {
 		dispatch(editPost({ _id: id, title, message }));
 	};
 
-	useEffect(() => {
-		setFieldValue('title')(title);
-		setFieldValue('message')(message);
-	}, []);
+	fields.message = post.message;
+	fields.title = post.title;
 
 	return (
 		<form className="edit-memory">
-			{fieldsEntries.map(([key, value]) => (
+			{fieldsEntries.map(([key]) => (
 				<TextInput
 					key={key}
 					value={fields[key]}
-					placeholder={value}
-					getValue={setFieldValue(key)}
+					placeholder=""
+					passValueToParent={setFieldValue(key)}
 				/>
 			))}
 			<Button type="button" onClick={handleOnSubmit}>
-				{isActive && isEditing && isCurrentPost ? 'Editing...' : 'Edit'}
+				{isPostUpdatingActive && isEditing && isCurrentPost
+					? 'Editing...'
+					: 'Edit'}
 			</Button>
 		</form>
 	);

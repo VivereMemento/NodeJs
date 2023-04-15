@@ -1,47 +1,36 @@
 import { Form } from 'react-router-dom';
 import { TextInput } from '../../components/UI/Input/Input';
+import { formFieldsState } from '../../components/UI/Input/helpers';
 
-const SIGN_UP_FORM = {
-	firstname: 'firstname',
-	lastname: 'lastname',
-	email: 'email',
-	password: 'password',
-	repeatPassword: 'repeatPassword',
-} as const;
-
-type SignUpFormKeys = keyof typeof SIGN_UP_FORM;
-
-const initialSignUpFormState: Record<keyof typeof SIGN_UP_FORM, string> = {
+const initialSignUpFormState = {
 	firstname: '',
 	lastname: '',
 	email: '',
 	password: '',
 	repeatPassword: '',
 };
-const signUpFormEntries = Object.entries(
-	initialSignUpFormState
-) as ReadonlyArray<[SignUpFormKeys, string]>;
 
-const setInitialSignUpFormState = (key: SignUpFormKeys) => (value: string) => {
-	initialSignUpFormState[key] = value;
-};
+const { fields, fieldsEntries, setFieldValue } = formFieldsState(
+	initialSignUpFormState
+);
 
 const SignUp = () => {
 	return (
-		<Form
-			className="signup"
-			method="post"
-			onSubmit={() => console.log(initialSignUpFormState)}
-		>
-			{signUpFormEntries.map(([key, value]) => {
+		<Form className="signup" method="post" onSubmit={() => console.log(fields)}>
+			{fieldsEntries.map(([key, value]) => {
 				return (
 					<label key={key} htmlFor={key}>
 						<span className="signup__label">{key}:</span>
 						<TextInput
-							getValue={setInitialSignUpFormState(key)}
+							passValueToParent={setFieldValue(key)}
 							placeholder=""
 							value={value}
 							name={key}
+							type={
+								key === 'password' || key === 'repeatPassword'
+									? 'password'
+									: 'text'
+							}
 						/>
 					</label>
 				);
